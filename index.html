@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>React - HOC</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sample HOC">
+    <link rel="icon" href="favicon.ico" sizes="16x16"/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="react.js"></script>
+    <script src="react-dom.js"></script>
+    <script src="babel.js"></script>
+    <script type="text/babel">
+      class Counter extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            counter: 0
+          };
+          this._increment = this._increment.bind(this);
+          console.log("Initialize Func()...");
+        }
+
+        updateCounterValue(newValue) {
+          let state = {};
+          state["counter"] = newValue;
+          this.setState(state);
+        }
+
+        componentWillMount() {
+          this.updateCounterValue(this.props.initialCounterValue);
+          console.log("Component Will Mount Func()...");
+        }
+
+        componentDidMount() {
+          console.log("Component Did Mount Func()...");
+        }
+
+        componentWillReceiveProps(nextProps) {
+          this.updateCounterValue(nextProps.initialCounterValue);
+          console.log("Component Will Receive Props Func()...");
+          console.log("WillRecieveProps - NextProps: ", nextProps);
+        }
+
+        shouldComponentUpdate(nextProps, nextState) {
+          console.log("Should Component Update Func()...");
+          console.log("Should CUpdate - NextProps: ", nextProps);
+          console.log("Should CUpdate - NextState: ", nextState);
+          return true;
+        }
+
+        componentWillUpdate(nextProps, nextState) {
+          console.log("Component Will Update Func()...");
+          console.log("CWillUpdate - NextProps: ", nextProps);
+          console.log("CWillUpdate - NextState: ", nextState);
+        }
+
+        componentDidUpdate(prevProps, prevState) {
+          console.log("Component Did Update Func()...");
+          console.log("CDidUpdate - PrevProps: ", prevProps);
+          console.log("CDidUpdate - PrevState: ", prevState);
+        }
+
+        componentWillUnmount() {
+          console.log("Component Will Unmount Func()...");
+        }
+    
+        _increment() {
+          this.updateCounterValue(this.state.counter + 1)
+        }
+
+        render() {
+          return (
+            <section>
+              <h3>Increment Counter</h3>
+              <p>
+                Props Value&nbsp;:&nbsp;&nbsp;
+                <span style={{color: "red"}}>{this.props.initialCounterValue}</span>
+              </p>
+              <p>
+                Counter Value&nbsp;:&nbsp;&nbsp;
+                <span style={{color: "red"}}>{this.state.counter}</span>
+              </p>
+              <button onClick={this._increment}>Inc</button>
+            </section>
+          );
+        }
+      };
+
+      class SampleComponent extends React.Component {
+        constructor(props) {
+          super(props)
+          this.state = {
+            initialCounterValue: 0
+          };
+          this._onChange = this._onChange.bind(this);
+        }
+
+        _onChange(evt) {
+          let state = {};
+          state["initialCounterValue"] = Number(evt.target.value);
+          this.setState(state);
+        }
+
+        render() {
+          console.log(this.state.initialCounterValue);
+          return (
+            <div>
+              <h1>Hello King!</h1>
+              <h3><u>Set Initial Counter Value</u></h3>
+              <div>
+                <input type="number" id="counter" name="counter" value={this.state.initialCounterValue} 
+                  onChange={this._onChange} />
+              </div>
+              <Counter initialCounterValue={this.state.initialCounterValue} />
+            </div>
+          );
+        }
+      };
+      ReactDOM.render(<SampleComponent />, document.getElementById("root"));
+    </script>
+     <script type="text/javascript">
+      var babel_scripts = document.querySelectorAll('script[type="text/babel"]');
+      Array.prototype.forEach.call(babel_scripts, function (script, index, arr) {
+        var input = script.textContent;
+        var output = Babel.transform( input, { presets: ['es2015', 'react'] }).code;
+        var new_script = document.createElement('script');
+        new_script.setAttribute('type', 'text/javascript');
+        new_script.textContent = output;
+        script.remove();
+        document.querySelector('body').appendChild(new_script);
+      });
+    </script>
+  </body>
+</html>
